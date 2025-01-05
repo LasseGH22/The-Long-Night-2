@@ -47,13 +47,3 @@ const [forgedSword, setForgedSword] = useState<ForgedSword | null>(null);
         </Context.Provider>
     );
 };
-
-/*
-export const useGlobalState = () => {
-    const context = useContext(Context);
-    if (!Context) {
-        throw new Error("Context must be used inside provider");
-    }
-    return context;
-}
-*/

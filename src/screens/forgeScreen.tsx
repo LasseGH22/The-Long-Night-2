@@ -8,11 +8,11 @@ import { Context } from "../context/context";
 
 const ForgeScreen: React.FC = () => {
 
-const { forgedSword, setForgedSword } = useContext(Context);
-const [chosenMaterial, setChosenMaterial] = useState<Material>(
+const { forgedSword, setForgedSword } = useContext(Context); // For Context
+const [chosenMaterial, setChosenMaterial] = useState<Material>( // For Context
   (forgedSword?.material as Material) || Material.Fire
 )
-const [chosenSwordType, setChosenSwordType] = useState<SwordType>(
+const [chosenSwordType, setChosenSwordType] = useState<SwordType>( // For Context
   (forgedSword?.swordType as SwordType) || SwordType.Greatsword
 )
 

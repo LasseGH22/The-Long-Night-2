@@ -1,16 +1,40 @@
-import React, { useContext } from 'react';
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Image } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Image, Alert } from 'react-native';
 import GOTHeader from '../components/GOTComponents/GOTHeader';
 import { nightTheme } from '../constants/colors';
 import { Context } from "../context/context";
 import Lightbringer from '../components/lightBringer';
+import * as Location from "expo-location";
+
+//                                                              REMEMBER IMPORTS!!!
 
 
 const BattleScreen: React.FC = () => {
-  const { selectedCharactersForBattle, forgedSword } = useContext(Context);
+  const { selectedCharactersForBattle, forgedSword } = useContext(Context); // Used for implementation of context
+  const [coordinates, setCoordinates] = useState<{ latitude: number; longitude: number } | null>(null);
 
-  function handlePress(): void {
-    
+  const handlePress = async () => {
+    try {
+      // Request location permissions
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Permission Denied", "Location permission is required to battle!");
+        return;
+      }
+
+      // Get the current location
+      const location = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = location.coords;
+
+      // Print latitude and longitude
+      console.log("Latitude:", latitude);
+      console.log("Longitude:", longitude);
+
+      // Alternatively, you can display it in the UI
+      setCoordinates({ latitude, longitude })
+    } catch (error) {
+      console.error("Error getting location:", error);
+    }
   }
 
   return (
@@ -23,14 +47,14 @@ const BattleScreen: React.FC = () => {
         <View>
           <Text>Selected Characters:</Text>
           <View style={styles.row}>
-            {selectedCharactersForBattle.map((char) => (
+            {selectedCharactersForBattle.map((char) => ( // Basicly a for loop for displaying characters
               <Image key={char.id} source={{uri: char.imageUrl}} style={styles.characterImage}></Image>
             ))}
           </View>
             
         
         <Text>Forged Sword:</Text>
-        {forgedSword ? (
+        {forgedSword ? ( // Conditional rendering of sword
           <Lightbringer
             material={forgedSword.material}
             swordType={forgedSword.swordType}
@@ -44,6 +68,17 @@ const BattleScreen: React.FC = () => {
           <TouchableOpacity onPress={handlePress}>
             <Text style={styles.buttonText}>Battle</Text>
           </TouchableOpacity>
+          {coordinates?.latitude ? (
+            <Text>Latitude: {coordinates?.latitude}</Text>
+          ) : (
+            <Text>Latitude not found!</Text>
+          )} 
+          
+          {coordinates?.longitude ? (
+            <Text>Longtitude: {coordinates?.longitude}</Text>
+          ) : (
+            <Text>Longtitude not found!</Text>
+          )}
         </View>
       </ImageBackground>
     </View>

@@ -13,9 +13,9 @@ const WinterfellScreen: React.FC = () => {
   const [characters, setCharacters] = useState<any[]>([]);
   const [selectedCharacterbyId, setSelectedCharacterId] = useState<number | null>(null) //Toggle selected character
   
-  const { selectedCharactersForBattle, setSelectedForBattle} = useContext(Context)
+  const { selectedCharactersForBattle, setSelectedForBattle} = useContext(Context) //Til Context
 
-  /*
+  /* Før brug af Context
   const [selectedForBattle, setSelectedForBattle] = useState<number[]>([])
   */
   
@@ -34,6 +34,7 @@ const WinterfellScreen: React.FC = () => {
     setSelectedCharacterId((prev) => (prev === id ? null : id))
   };
 
+  // Redirecter ved 3 valgte karaktere
   useEffect(() => {
     if (selectedCharactersForBattle.length === 3) {
       navigation.navigate("ForgeScreen")
@@ -56,6 +57,33 @@ const WinterfellScreen: React.FC = () => {
       }
     });
   };
+
+  /* Før brug af Context
+  
+  Toggle for battle
+  const toggleFighter = (id: number) => {
+    setSelectedForBattle((prev) => {
+
+      Toggle for battle (If character is already selected removes characters id from selectedForBattle array)
+      if(prev.includes(id)) {
+        return prev.filter((characterId) => characterId !== id);
+      } 
+      
+      Toggle for battle (If not already in the array and no more than 3 are chosen we add the new characters id)
+      else if (prev.length < 2) {
+        return [...prev, id];
+      }
+
+      Toggle for battle (If 3 characters has been chosen we navigate to the forgeScreen)
+      if(prev.length === 2) {
+        navigation.navigate("ForgeScreen")
+      }
+
+      return prev;
+    })
+  };
+
+  */
 
   return (
     <View style={styles.container}>
